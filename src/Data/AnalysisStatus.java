@@ -1,4 +1,7 @@
 package Data;
 
-public class AnalysisStatus {
+public enum AnalysisStatus {
+    PENDING,
+    COMPLETED,
+    ERROR
 }

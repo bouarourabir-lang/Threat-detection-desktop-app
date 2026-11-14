@@ -1,4 +1,6 @@
 package Data;
 
-public class InputType {
+public enum InputType {
+    URL,
+    MESSAGE
 }

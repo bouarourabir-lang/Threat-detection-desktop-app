@@ -1,4 +1,3 @@
-package Concurrency;
-
+package Concurrency ;
 public class AnalysisProgress {
 }
