@@ -60,8 +60,7 @@ public class MessageAnalyzer {
                 indicators.contains("Threat language")
         );
 
-        String riskLevel =
-                MessageRiskScore.getRiskLevel(score);
+        String riskLevel = MessageRiskScore.getRiskLevel(score);
 
         String description;
 
@@ -96,12 +95,9 @@ public class MessageAnalyzer {
         List<String> indicators = new ArrayList<>();
 
         // Suspicious keywords
-        if (containsAny(text,
-                "congratulations",
-                "you won a prize",
-                "free gift",
-                "claim your reward",
-                "verify your account")) {
+        if (containsAny(text,"congratulations", "you won a prize",
+                "free gift", "claim your reward",
+                "verify your account" , "account verification required")) {
 
             indicators.add("Suspicious keywords");
         }
@@ -137,7 +133,7 @@ public class MessageAnalyzer {
                 "account will be suspended",
                 "account will be deleted",
                 "account is blocked",
-                "account has been blocked")) {
+                "account has been blocked" , "prevent suspension")) {
 
             indicators.add("Threat language");
         }
@@ -145,8 +141,7 @@ public class MessageAnalyzer {
         return indicators;
     }
 
-    private static boolean containsAny(
-            String text, String... keywords) {
+    private static boolean containsAny(String text, String... keywords) {
 
         for (String keyword : keywords) {
 

@@ -1,6 +1,7 @@
 package Data;
 
-public class ThreatResult {
+public class ThreatResult
+{
     private final String input;
     private final int score;
     private final String level;
@@ -28,5 +29,6 @@ public class ThreatResult {
     public String getDescription() {
         return description;
     }
+
 
 }

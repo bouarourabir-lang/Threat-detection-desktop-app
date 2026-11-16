@@ -3,7 +3,7 @@ import java.net.URI ;
 import java.net.URISyntaxException;
 public class URLAnalyzer
 {
-    private URLValidation urlvalidate =new URLValidation();
+    private URLValidation urlvalidate=new URLValidation();
     public void splittingurl (String url)throws URISyntaxException
     {
         URI uri=new URI(url);
@@ -40,7 +40,7 @@ public class URLAnalyzer
                 }
             }
             int num=Integer.parseInt(part);
-            if(num < 0 || num > 255)
+            if(num<0||num>255)
             {
                 return false;
             }
@@ -49,16 +49,58 @@ public class URLAnalyzer
     }
 
 
-    public boolean analyzeDomain(String host,String url)
+    public boolean analyzeDomain(String host)
     {
         String []parts=host.split("\\.");
         if(parts.length>3)
         {
             return true;
         }
+
+        return false;
+    }
+
+    public boolean analyzeSymbol(String url)
+    {
         if(url.contains("@"))
         {
             return true;
+        }
+        return false;
+    }
+    public boolean punyCode(String host)   // ieeee 2022 phishing url detection
+    {
+        String []parts=host.split("\\.");
+        for(String part:parts)
+        {
+            if(part.toLowerCase().startsWith("xn--"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean urlShortener(String host)//recherche in lnu-pish
+    {
+        String[]Shorteners= { "bit.Ly","tinyurl.com","t.co","is.gd","ow.ly"};
+        for(String Shortener:Shorteners )
+        {
+            if(host.equalsIgnoreCase(Shortener))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean suspiciousKeywords(String url)//ieeee 2022
+    {
+        String[] keywords= {"Login","verify","password","account","security","update"};
+        for(String keyword:keywords)
+        {
+            if(url.contains(keyword))
+            {
+                return true;
+            }
         }
         return false;
     }
