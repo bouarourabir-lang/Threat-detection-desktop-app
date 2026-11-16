@@ -256,7 +256,14 @@ public class InputPane extends Application {
                         }
                     }
 
-
+            if (items.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("No Input");
+                alert.setHeaderText("No data to analyze");
+                alert.setContentText("Please enter data or select a CSV file.");
+                alert.showAndWait();
+                return;
+            }
 
 
             // Analyze inputs
