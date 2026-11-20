@@ -125,21 +125,15 @@ public class ResultsPane {
     // Start a new batch of analyses
 
     public void startBatch(int total) {
-
         Platform.runLater(() -> {
-
             totalItems = total;
-
             currentItem = 1;
-
             table.getItems().clear();
+            progressPane.reset();          // <-- جديد
 
             if (totalItems > 0) {
-
                 progressPane.startAnalysis(1, totalItems);
-
             }
-
         });
     }
 

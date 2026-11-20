@@ -1,4 +1,3 @@
-
 package AnalyseMessage;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class MessageAnalyzer {
     }
 
     // Traditional + Semantic Detection
-    private static synchronized List<String> detectHybridIndicators(
+    private static List<String> detectHybridIndicators(
             String message) {
 
         String text = MessagePreprocessor.preprocess(message);
@@ -41,16 +40,30 @@ public class MessageAnalyzer {
                 detectProcessedIndicators(text);
 
         // Semantic indicators
-        List<String> semanticIndicators;
+        List<String> semanticIndicators = new ArrayList<>();
 
         try {
             semanticIndicators =
-                    getSemanticAnalyzer().analyze(message);
+                    new ArrayList<>(getSemanticAnalyzer().analyze(message));
 
         } catch (Exception e) {
-            throw new IllegalStateException(
-                    "Semantic analysis failed.", e
+            // If the AI part fails, we still use the traditional result
+            System.err.println(
+                    "Semantic analysis unavailable: " + e.getMessage()
             );
+        }
+
+        // Warnings like "never share your password" are not requests,
+        // even if the AI finds them similar to a credential request
+        if (!traditionalIndicators.contains("Credential request")
+                && containsAny(cleanText(text),
+                "never share",
+                "do not share",
+                "dont share",
+                "forgot my password",
+                "password policy")) {
+
+            semanticIndicators.remove("Credential request");
         }
 
         // Merge indicators without duplicates
@@ -135,14 +148,19 @@ public class MessageAnalyzer {
 
     private static List<String> detectProcessedIndicators(String text) {
 
+        // Remove punctuation so "Act now!" becomes "act now"
+        text = cleanText(text);
+
         List<String> indicators = new ArrayList<>();
 
         // Suspicious keywords
         if (containsAny(text,
-                "congratulations",
                 "you won a prize",
                 "you won",
+                "you have won",
+                "youve won",
                 "free gift",
+                "gift card",
                 "claim your reward",
                 "claim your prize",
                 "special reward",
@@ -156,20 +174,49 @@ public class MessageAnalyzer {
             indicators.add("Suspicious keywords");
         }
 
-        // Credential requests
-        if (containsAny(text,
+        // Credential request = a request word + a sensitive item,
+        // and the message must not be a warning ("never share ...")
+        boolean hasRequestWord = containsAny(text,
+                "share",
+                "send",
+                "provide",
+                "give",
+                "enter",
+                "submit",
+                "confirm",
+                "tell",
+                "reply with",
+                "need",
+                "needs",
+                "require",
+                "requires");
+
+        boolean hasSensitiveItem = containsAny(text,
                 "password",
                 "otp",
+                "one time password",
                 "verification code",
+                "security code",
+                "secret word",
+                "code that was sent",
+                "code sent",
                 "credit card",
-                "credit card number",
                 "card number",
                 "card details",
                 "card pin",
                 "pin number",
                 "bank account",
-                "bank account details",
-                "login credentials")) {
+                "login credentials");
+
+        boolean isWarning = containsAny(text,
+                "never share",
+                "do not share",
+                "dont share",
+                "forgot my password",
+                "reset my password",
+                "password policy");
+
+        if (hasRequestWord && hasSensitiveItem && !isWarning) {
 
             indicators.add("Credential request");
         }
@@ -200,6 +247,16 @@ public class MessageAnalyzer {
                 "account will be deleted",
                 "account is blocked",
                 "account has been blocked",
+                "has been suspended",
+                "has been temporarily suspended",
+                "account being blocked",
+                "account being suspended",
+                "lose access to your account",
+                "access will be terminated",
+                "access could be restricted",
+                "account may become inaccessible",
+                "result in loss of",
+                "lead to account suspension",
                 "prevent suspension")) {
 
             indicators.add("Threat language");
@@ -208,13 +265,23 @@ public class MessageAnalyzer {
         return indicators;
     }
 
+    // Keep only letters, digits and spaces, with a space at each end
+    private static String cleanText(String text) {
 
+        return " " + text
+                .replace("'", "")
+                .replaceAll("[^a-z0-9 ]", " ")
+                .replaceAll("\\s+", " ")
+                .trim() + " ";
+    }
+
+    // Check whole words only (so "otp" does not match "hotpot")
     private static boolean containsAny(
             String text, String... keywords) {
 
         for (String keyword : keywords) {
 
-            if (text.contains(keyword)) {
+            if (text.contains(" " + keyword + " ")) {
                 return true;
             }
         }

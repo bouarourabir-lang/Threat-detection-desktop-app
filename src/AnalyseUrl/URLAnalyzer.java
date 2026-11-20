@@ -17,7 +17,7 @@ public class URLAnalyzer
 
     public boolean analyseProtocol( String scheme)
     {
-        if(scheme.equals("http")||scheme.equals("fttp"))
+        if(scheme.equals("http")||scheme.equals("ftp"))
         {
             return true;
         }
