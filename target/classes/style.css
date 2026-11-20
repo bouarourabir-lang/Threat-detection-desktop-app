@@ -1,0 +1,243 @@
+
+
+.app-root {
+    -fx-background-color: #F2F6F1;
+    -fx-padding: 25;
+}
+
+/* Main title */
+
+.app-title {
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #164A43;
+}
+
+
+  /* INPUT PANE*/
+
+.radio-box {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #D5E5DD;
+}
+
+/* Input sections */
+
+.input-section {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 15;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #C9DDD3;
+}
+
+/* Radio Buttons */
+
+.radio-button {
+    -fx-text-fill: #164A43;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.radio-button .radio {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #6B9D8B;
+    -fx-border-radius: 50%;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #2D7666;
+    -fx-border-color: #164A43;
+}
+
+/* TextField and TextArea */
+
+.text-field,
+.text-area {
+    -fx-background-color: #F7FAF7;
+    -fx-border-color: #B8D2C5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #164A43;
+    -fx-prompt-text-fill: #91A99E;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: #2D7666;
+    -fx-border-width: 1.5;
+}
+
+.text-area .content {
+    -fx-background-color: #F7FAF7;
+    -fx-background-radius: 8;
+}
+
+/* Labels */
+
+.label {
+    -fx-text-fill: #164A43;
+}
+
+/* Buttons */
+
+.button {
+    -fx-background-color: #2D7666;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 9 20;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #164A43;
+}
+
+/* Analyze Button */
+
+.analyze-button {
+    -fx-background-color: #164A43;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 12 30;
+}
+
+.analyze-button:hover {
+    -fx-background-color: #2D7666;
+}
+
+/* CSV File Label */
+
+.file-label {
+    -fx-background-color: #E8F2EC;
+    -fx-padding: 10;
+    -fx-background-radius: 8;
+    -fx-text-fill: #2D7666;
+}
+
+/* ScrollPane */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/*
+   PROGRESS PANE
+    */
+
+.progress-card {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 20;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #D5E5DD;
+}
+
+.analysis-progress {
+    -fx-pref-height: 20px;
+    -fx-min-height: 20px;
+    -fx-max-height: 20px;
+    -fx-pref-width: 400px;
+    -fx-background-radius: 20;
+    -fx-accent: #2D7666;
+}
+
+.analysis-progress > .track {
+    -fx-background-color: #DDEBE3;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+
+.analysis-progress > .bar {
+    -fx-background-color: #2D7666;
+    -fx-background-radius: 20;
+    -fx-background-insets: 0;
+}
+
+.analysis-progress > .track {
+    -fx-background-color: #DDEBE3;
+    -fx-background-radius: 20;
+}
+
+.analysis-progress > .bar {
+    -fx-background-color: #2D7666;
+    -fx-background-radius: 20;
+}
+
+.progress-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D7666;
+}
+
+.analysis-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #164A43;
+}
+
+/*
+   RESULT TABLE
+   */
+
+.results-table {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 12;
+    -fx-border-color: #D5E5DD;
+    -fx-border-radius: 12;
+    -fx-padding: 5;
+}
+
+.results-table .column-header-background {
+    -fx-background-color: #164A43;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.results-table .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+    -fx-border-color: transparent;
+}
+
+.results-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.results-table .table-row-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #E4EEE8 transparent;
+    -fx-cell-size: 38px;
+}
+
+.results-table .table-row-cell:odd {
+    -fx-background-color: #F3F8F4;
+}
+
+.results-table .table-row-cell:selected {
+    -fx-background-color: #D5E9DE;
+}
+
+.results-table .table-cell {
+    -fx-text-fill: #164A43;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8;
+}
+
+.results-table .placeholder .label {
+    -fx-text-fill: #91A99E;
+    -fx-font-size: 14px;
+}

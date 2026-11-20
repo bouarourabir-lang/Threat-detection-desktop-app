@@ -4,7 +4,7 @@ package UI;
 import javafx.application.Platform;
 
 
-
+import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 
@@ -37,6 +37,7 @@ public class ResultsPane {
         // Create Table
         table = new TableView<>();
         table.setPrefHeight(250);
+        table.getStyleClass().add("results-table");
 
 
 
@@ -113,12 +114,6 @@ public class ResultsPane {
                 progressPane.getProgressLayout(),
                 table
         );
-
-
-        // Create Scene
-
-
-
     }
 
 

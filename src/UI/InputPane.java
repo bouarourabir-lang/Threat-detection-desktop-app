@@ -285,6 +285,7 @@ public class InputPane extends Application {
                 for (int i = 0; i < items.size(); i++) {
 
                     InputItem item = items.get(i);
+                    System.out.println("Analyzing item " + (i + 1) + " of " + items.size());
 
                     if (i > 0) {
                         resultsPane.startNextItem();
@@ -354,6 +355,10 @@ public class InputPane extends Application {
 
         // 20. Create and show window
         Scene scene = new Scene(root, 900, 700);
+
+        scene.getStylesheets().add(
+                getClass().getResource("/style.css").toExternalForm()
+        );
         stage.setScene(scene);
         stage.setTitle("Threat Detection");
         stage.show();

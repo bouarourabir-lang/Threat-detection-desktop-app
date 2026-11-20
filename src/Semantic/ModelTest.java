@@ -1,35 +1,43 @@
 
 package Semantic;
 
-import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
-
-import java.nio.file.Paths;
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtSession;
 
 public class ModelTest {
 
     public static void main(String[] args) throws Exception {
 
-        String tokenizerPath =
-                "models/all-MiniLM-L6-v2/tokenizer.json";
+        String modelPath =
+                "models/all-MiniLM-L6-v2/model.onnx";
 
-        HuggingFaceTokenizer tokenizer =
-                HuggingFaceTokenizer.newInstance(
-                        Paths.get(tokenizerPath)
-                );
+        // الحصول على ONNX Environment
+        OrtEnvironment environment =
+                OrtEnvironment.getEnvironment();
 
-        String message =
-                "Your account will be suspended. Verify your password immediately.";
+        // إعدادات النموذج
+        OrtSession.SessionOptions options =
+                new OrtSession.SessionOptions();
 
-        long[] tokens = tokenizer.encode(message).getIds();
+        // تحميل النموذج
+        try (OrtSession session =
+                     environment.createSession(modelPath, options)) {
 
-        System.out.println("Original Message:");
-        System.out.println(message);
+            System.out.println("Model loaded successfully!");
 
-        System.out.println("\nTokens:");
-        for (long token : tokens) {
-            System.out.print(token + " ");
+            // عرض أسماء المدخلات
+            System.out.println("\nModel Inputs:");
+            for (String input : session.getInputNames()) {
+                System.out.println(input);
+            }
+
+            // عرض أسماء المخرجات
+            System.out.println("\nModel Outputs:");
+            for (String output : session.getOutputNames()) {
+                System.out.println(output);
+            }
         }
 
-        System.out.println("\n\nNumber of Tokens: " + tokens.length);
+        options.close();
     }
 }

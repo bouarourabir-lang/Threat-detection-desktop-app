@@ -18,6 +18,7 @@ public class ProgressPane {
         // Create ProgressBar
         progressBar = new ProgressBar(0);
         progressBar.setPrefWidth(400);
+        progressBar.getStyleClass().add("analysis-progress");
 
         // Create Labels
         progressLabel = new Label("Progress: 0%");

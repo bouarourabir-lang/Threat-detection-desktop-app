@@ -3,18 +3,20 @@ public class URLRiskScore
 {
     private URLAnalyzer analyzer=new URLAnalyzer();
     StringBuilder description=new StringBuilder();
-    public int calculateScore(String scheme,String host,String url)
+    public int calculateScore(String scheme,String host,String url,String path)
     {   description.setLength(0);  //vider la description
         int score=0;
-        boolean ishttp=analyzer.analyseProtocol(scheme);
+        boolean isprotocolsec=analyzer.analyseProtocol(scheme);
         boolean isip=analyzer.analyseIp(host);
         boolean domain=analyzer.analyzeDomain(host);
         boolean symbol=analyzer.analyzeSymbol(url);
-        boolean punycode=analyzer.punyCode(host);
         boolean shortener=analyzer.urlShortener(host);
+        boolean punycode=analyzer.punyCode(host);
         boolean keyword=analyzer.suspiciousKeywords(url);
-
-        if(ishttp)
+        boolean  longpath=analyzer.longPath(path);
+        boolean deeppath=analyzer.deepPath(path);
+        boolean multipleDot=analyzer.multipledot(path);
+        if(isprotocolsec)
         {
             score+=3;
             description.append("the url uses http protocol."+"\n");
@@ -48,6 +50,21 @@ public class URLRiskScore
         {
             score+=2;
             description.append("the url contains suspicious keyword."+"\n");
+        }
+        if(longpath)
+        {
+            score+=2;
+            description.append("the url containsa long path."+"\n");
+        }
+        if(deeppath)
+        {
+            score+=2;
+            description.append("the url containsa long path."+"\n");
+        }
+        if(multipleDot)
+        {
+            score+=2;
+            description.append("the url containsa long path."+"\n");
         }
         return score;
     }

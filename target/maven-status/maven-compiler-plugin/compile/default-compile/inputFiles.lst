@@ -17,7 +17,13 @@ C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Data\InputTy
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Data\RiskLevel.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Data\ThreatResult.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Results\ResultFormatter.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\CosineSimilarity.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\ModelTest.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\SemanticAnalyzer.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\SemanticAnalyzerTest.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\SemanticDetectionTest.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\SemanticEmbeddingTest.java
+C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\Semantic\SemanticReference.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\UI\InputPane.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\UI\MainWindow.java
 C:\Users\Far DigiTech\IdeaProjects\Threat-detection-desktop-app\src\UI\ProgressPane.java

@@ -88,11 +88,12 @@ public class AnalysisManager {
 
             String scheme = uri.getScheme();
             String host = uri.getHost();
+            String path = uri.getPath();
 
             // Calculate risk score
             URLRiskScore riskScore = new URLRiskScore();
 
-            int score = riskScore.calculateScore(scheme, host, url);
+            int score = riskScore.calculateScore(scheme, host, url,path);
 
             // Get risk level and description
             String level = riskScore.Risklevel(score);

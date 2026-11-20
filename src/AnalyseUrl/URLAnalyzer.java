@@ -4,6 +4,8 @@ import java.net.URISyntaxException;
 public class URLAnalyzer
 {
     private URLValidation urlvalidate=new URLValidation();
+
+
     public void splittingurl (String url)throws URISyntaxException
     {
         URI uri=new URI(url);
@@ -15,7 +17,7 @@ public class URLAnalyzer
 
     public boolean analyseProtocol( String scheme)
     {
-        if(scheme.equalsIgnoreCase("http"))
+        if(scheme.equals("http")||scheme.equals("fttp"))
         {
             return true;
         }
@@ -60,6 +62,7 @@ public class URLAnalyzer
         return false;
     }
 
+
     public boolean analyzeSymbol(String url)
     {
         if(url.contains("@"))
@@ -68,7 +71,9 @@ public class URLAnalyzer
         }
         return false;
     }
-    public boolean punyCode(String host)   // ieeee 2022 phishing url detection
+
+
+    public boolean punyCode(String host)
     {
         String []parts=host.split("\\.");
         for(String part:parts)
@@ -80,9 +85,11 @@ public class URLAnalyzer
         }
         return false;
     }
-    public boolean urlShortener(String host)//recherche in lnu-pish
+
+
+    public boolean urlShortener(String host)
     {
-        String[]Shorteners= { "bit.Ly","tinyurl.com","t.co","is.gd","ow.ly"};
+        String[]Shorteners= { "bit.ly","tinyurl.com","t.co","is.gd","ow.ly"};
         for(String Shortener:Shorteners )
         {
             if(host.equalsIgnoreCase(Shortener))
@@ -92,15 +99,57 @@ public class URLAnalyzer
         }
         return false;
     }
-    public boolean suspiciousKeywords(String url)//ieeee 2022
+
+
+    public boolean suspiciousKeywords(String url)
     {
-        String[] keywords= {"Login","verify","password","account","security","update"};
+        String[] keywords= {"login","verify","password","account","security","update"};
+        String lowerurl=url.toLowerCase();
         for(String keyword:keywords)
         {
-            if(url.contains(keyword))
+            if(lowerurl.contains(keyword))
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+
+    public boolean longPath(String path)
+    {
+        if(path.length()>100)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean deepPath(String path)
+    {
+        String []parts=path.split("/");
+        if(parts.length>5)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean multipledot(String path)
+    {
+        int count=0;
+        for(int i=0;i<path.length();i++)
+        {
+            if(path.charAt(i)=='.')
+            {
+                count++;
+            }
+        }
+        if(count>4)
+        {
+            return true;
         }
         return false;
     }
