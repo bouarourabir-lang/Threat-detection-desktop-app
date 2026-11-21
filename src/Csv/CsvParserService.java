@@ -13,14 +13,12 @@ public class CsvParserService
 {
     private List<String> errors = new ArrayList<>();
 
-    public List<InputItem> parseCsv(String filePath)
-            throws IOException {
+    public List<InputItem> parseCsv(String filePath) throws IOException {
 
         return parseCsv(Path.of(filePath));
     }
 
-    public List<InputItem> parseCsv(Path filePath)
-            throws IOException {
+    public List<InputItem> parseCsv(Path filePath) throws IOException {
 
         errors.clear();
 
@@ -30,8 +28,7 @@ public class CsvParserService
         }
 
         // Read CSV file
-        List<String> lines = Files.readAllLines(
-                filePath, StandardCharsets.UTF_8);
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
 
         // Check if file is empty
         if (lines.isEmpty()) {
@@ -68,13 +65,11 @@ public class CsvParserService
 
                 // Check empty values
                 if (typeValue.isEmpty() || content.isEmpty()) {
-                    throw new IllegalArgumentException(
-                            "Empty type or content");
+                    throw new IllegalArgumentException("Empty type or content");
                 }
 
                 // Convert string to InputType
-                InputType type = InputType.valueOf(
-                        typeValue.toUpperCase(Locale.ROOT));
+                InputType type = InputType.valueOf(typeValue.toUpperCase(Locale.ROOT));
 
                 // Create InputItem
                 InputItem item = new InputItem(type, content);

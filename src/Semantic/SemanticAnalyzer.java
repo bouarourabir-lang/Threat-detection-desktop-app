@@ -36,19 +36,12 @@ public class SemanticAnalyzer implements AutoCloseable {
 
         String folder = "models/all-MiniLM-L6-v2/";
 
-        tokenizer = HuggingFaceTokenizer.newInstance(
-                Paths.get(folder + "tokenizer.json")
-        );
+        tokenizer = HuggingFaceTokenizer.newInstance(Paths.get(folder + "tokenizer.json"));
 
         environment = OrtEnvironment.getEnvironment();
 
-        try (OrtSession.SessionOptions options =
-                     new OrtSession.SessionOptions()) {
-
-            session = environment.createSession(
-                    folder + "model.onnx",
-                    options
-            );
+        try (OrtSession.SessionOptions options = new OrtSession.SessionOptions()) {
+            session = environment.createSession(folder + "model.onnx", options);
         }
 
         inputNames = session.getInputNames();
@@ -56,8 +49,7 @@ public class SemanticAnalyzer implements AutoCloseable {
         // Calculate reference embeddings only once
         referenceEmbeddings = new HashMap<>();
 
-        for (Map.Entry<String, List<String>> entry :
-                SemanticReference.REFERENCES.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : SemanticReference.REFERENCES.entrySet()) {
 
             List<float[]> embeddings = new ArrayList<>();
 
@@ -73,9 +65,7 @@ public class SemanticAnalyzer implements AutoCloseable {
     public float[] getEmbedding(String message) throws Exception {
 
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Message cannot be empty."
-            );
+            throw new IllegalArgumentException("Message cannot be empty.");
         }
 
         Encoding encoding = tokenizer.encode(message);
@@ -94,22 +84,18 @@ public class SemanticAnalyzer implements AutoCloseable {
         Map<String, OnnxTensor> inputs = new HashMap<>();
 
         try {
-            inputs.put("input_ids",
-                    OnnxTensor.createTensor(environment, inputIds));
+            inputs.put("input_ids", OnnxTensor.createTensor(environment, inputIds));
 
-            inputs.put("attention_mask",
-                    OnnxTensor.createTensor(environment, attentionMask));
+            inputs.put("attention_mask", OnnxTensor.createTensor(environment, attentionMask));
 
             // Only add token_type_ids if the model needs it
             if (inputNames.contains("token_type_ids")) {
-                inputs.put("token_type_ids",
-                        OnnxTensor.createTensor(environment, tokenTypeIds));
+                inputs.put("token_type_ids", OnnxTensor.createTensor(environment, tokenTypeIds));
             }
 
             try (OrtSession.Result result = session.run(inputs)) {
 
-                float[][][] output =
-                        (float[][][]) result.get(0).getValue();
+                float[][][] output = (float[][][]) result.get(0).getValue();
 
                 int vectorSize = output[0][0].length;
 
@@ -131,12 +117,10 @@ public class SemanticAnalyzer implements AutoCloseable {
                 }
 
                 if (validTokens == 0) {
-                    throw new IllegalStateException(
-                            "No valid tokens found."
-                    );
+                    throw new IllegalStateException("No valid tokens found.");
                 }
 
-                // Mean Pooling (average) - done ONLY ONCE
+                // Mean Pooling (average)  done ONLY ONCE
                 for (int j = 0; j < vectorSize; j++) {
                     embedding[j] /= validTokens;
                 }
@@ -151,9 +135,7 @@ public class SemanticAnalyzer implements AutoCloseable {
                 norm = Math.sqrt(norm);
 
                 if (norm == 0.0) {
-                    throw new IllegalStateException(
-                            "Cannot normalize a zero vector."
-                    );
+                    throw new IllegalStateException("Cannot normalize a zero vector.");
                 }
 
                 for (int j = 0; j < vectorSize; j++) {
@@ -164,7 +146,6 @@ public class SemanticAnalyzer implements AutoCloseable {
             }
 
         } finally {
-            // Always release the tensors
             for (OnnxTensor tensor : inputs.values()) {
                 tensor.close();
             }
@@ -197,9 +178,7 @@ public class SemanticAnalyzer implements AutoCloseable {
     public List<String> analyze(String message) throws Exception {
 
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Message cannot be empty."
-            );
+            throw new IllegalArgumentException("Message cannot be empty.");
         }
 
         // Embeddings of the full message and of each sentence
@@ -211,8 +190,7 @@ public class SemanticAnalyzer implements AutoCloseable {
 
         List<String> detectedIndicators = new ArrayList<>();
 
-        for (Map.Entry<String, List<float[]>> entry :
-                referenceEmbeddings.entrySet()) {
+        for (Map.Entry<String, List<float[]>> entry : referenceEmbeddings.entrySet()) {
 
             String category = entry.getKey();
 
@@ -222,11 +200,7 @@ public class SemanticAnalyzer implements AutoCloseable {
 
                 for (float[] referenceEmbedding : entry.getValue()) {
 
-                    double similarity =
-                            CosineSimilarity.calculate(
-                                    segmentEmbedding,
-                                    referenceEmbedding
-                            );
+                    double similarity = CosineSimilarity.calculate(segmentEmbedding, referenceEmbedding);
 
                     if (similarity > maxSimilarity) {
                         maxSimilarity = similarity;
@@ -247,7 +221,6 @@ public class SemanticAnalyzer implements AutoCloseable {
     }
 
     // Close ONNX session and tokenizer
-    // (the OrtEnvironment is shared, so it is NOT closed)
     @Override
     public void close() throws Exception {
 

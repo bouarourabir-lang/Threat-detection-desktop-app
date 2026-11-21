@@ -1,4 +1,7 @@
 package AnalyseUrl;
+
+import Data.RiskLevel;
+
 public class URLRiskScore
 {
     private URLAnalyzer analyzer=new URLAnalyzer();
@@ -79,15 +82,15 @@ public class URLRiskScore
     {
         if(score==0)
         {
-            return"low";
+            return RiskLevel.LOW.name();
         }
         else if(score<=3)
         {
-            return "medium";
+            return RiskLevel.MEDIUM.name();
         }
         else
         {
-            return "high";
+            return RiskLevel.HIGH.name();
         }
     }
 }

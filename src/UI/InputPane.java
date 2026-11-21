@@ -1,5 +1,6 @@
 package UI;
 
+import Data.AnalysisStatus;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -34,9 +35,8 @@ public class InputPane extends Application {
     @Override
     public void start(Stage stage) {
 
-        // 1. Create root
+        //Create root
         VBox root = new VBox(15);
-        //15 المساحة بين عناصر الحاوية vbox
         List<TextField> urlFields = new ArrayList<>();
 
         List<TextArea> messageFields = new ArrayList<>();
@@ -50,38 +50,35 @@ public class InputPane extends Application {
         resultsLayout.setVisible(false);
         resultsLayout.setManaged(false);
 
-        // 2. Create RadioButton
+        //Create RadioButton
         RadioButton urlRadio = new RadioButton("URL");
         RadioButton MesRadio = new RadioButton("Message");
         RadioButton csvRadio = new RadioButton("CSV File");
 
-        // 3. Create ToggleGroup
+        //Create ToggleGroup
         ToggleGroup group = new ToggleGroup();
 
         urlRadio.setToggleGroup(group);
         MesRadio.setToggleGroup(group);
         csvRadio.setToggleGroup(group);
 
-        // 4. Create Buttons
+        //Create Buttons
         Button addUrl = new Button("Add URL");
         Button addMes = new Button("Add Message");
         Button browseCSV = new Button("Browse Files");
 
-        // 5. Create a VBox to contain URL fields and Message areas
+        //Create a VBox to contain URL fields and Message areas
         VBox urlFieldsBox = new VBox(10);
         VBox MesFieldsBox = new VBox(10);
 
-        // 6. Create a Label to display selected CSV file
+        //Create a Label to display selected CSV file
         Label fileLabel = new Label("No file selected");
-        //تعرض النص لي داخلها للمستخدم
-        // 7. Create HBox to contain RadioButtons
+        //Create HBox to contain RadioButtons
         HBox radioBox = new HBox(15);
 
-        radioBox.getChildren().addAll(
-                urlRadio, MesRadio, csvRadio
-        );
+        radioBox.getChildren().addAll(urlRadio, MesRadio, csvRadio);
 
-        // 8. Create a VBox to contain input controls
+        //Create a VBox to contain input controls
         VBox urlBox = new VBox(10);
         urlBox.getChildren().addAll(addUrl, urlFieldsBox);
 
@@ -91,26 +88,24 @@ public class InputPane extends Application {
         VBox csvBox = new VBox(10);
         csvBox.getChildren().addAll(browseCSV, fileLabel);
 
-        // 9. Hide all input sections initially
+        //Hide all input sections initially
         urlBox.setVisible(false);
-        //تخفي العنصر
+        //Hide element
         urlBox.setManaged(false);
-        //تخفي مسلاحة العنصر
+
         MesBox.setVisible(false);
         MesBox.setManaged(false);
 
         csvBox.setVisible(false);
         csvBox.setManaged(false);
 
-        // 10. Create Analyze Button
+        //Create Analyze Button
         Button analyze = new Button("Analyze");
 
         analyze.setVisible(false);
         analyze.setManaged(false);
 
-        // 11. When URL is selected
-        //eمعنتها الاوامر لي رح تتنفد كي يضغط على الزر
-
+        //When URL is selected
         urlRadio.setOnAction(e -> {
 
             urlBox.setVisible(true);
@@ -123,7 +118,7 @@ public class InputPane extends Application {
             csvBox.setManaged(false);
         });
 
-        // 12. When Message is selected
+        //When Message is selected
         MesRadio.setOnAction(e -> {
 
             MesBox.setVisible(true);
@@ -136,7 +131,7 @@ public class InputPane extends Application {
             csvBox.setManaged(false);
         });
 
-        // 13. When CSV is selected
+        //When CSV is selected
         csvRadio.setOnAction(e -> {
 
             csvBox.setVisible(true);
@@ -149,7 +144,7 @@ public class InputPane extends Application {
             MesBox.setManaged(false);
         });
 
-        // 14. When Add URL is clicked
+        //When Add URL is clicked
         addUrl.setOnAction(e -> {
 
             TextField urlField = new TextField();
@@ -164,7 +159,7 @@ public class InputPane extends Application {
             analyze.setManaged(true);
         });
 
-        // 15. When Add Message is clicked
+          //When Add Message is clicked
         addMes.setOnAction(e -> {
 
             TextArea MesArea = new TextArea();
@@ -180,7 +175,7 @@ public class InputPane extends Application {
             analyze.setManaged(true);
         });
 
-        // 16. When Browse CSV is clicked
+        //When Browse CSV is clicked
         browseCSV.setOnAction(e -> {
 
             FileChooser fileChooser = new FileChooser();
@@ -200,7 +195,7 @@ public class InputPane extends Application {
             }
         });
 
-        // 17. Create Group
+        // Create Group
         analyze.setOnAction(e -> {
 
             List<InputItem> items = new ArrayList<>();
@@ -224,7 +219,6 @@ public class InputPane extends Application {
                     items.add(new InputItem(InputType.MESSAGE, message));
                 }
             }
-            // Collect CSV data
                     // Collect CSV data
                     if (selectedCSV[0] != null) {
 
@@ -266,42 +260,41 @@ public class InputPane extends Application {
             }
 
 
-            // Analyze inputs
-
-// Show Results
+            // Show Results
             resultsLayout.setVisible(true);
             resultsLayout.setManaged(true);
 
-// Start batch
+            // Start batch
             resultsPane.startBatch(items.size());
-            analyze.setDisable(true); //ta3til zir ta3 analyzer
-// Create a background thread
+            analyze.setDisable(true);
+             // Create a background thread
             Thread analysisThread = new Thread(() -> {
 
-                Concurrency.AnalysisManager manager =
-                        new Concurrency.AnalysisManager();
+                Concurrency.AnalysisManager manager = new Concurrency.AnalysisManager();
 
-                // Analyze inputs one by one
+                  // Analyze inputs one by one
                 for (int i = 0; i < items.size(); i++) {
 
                     InputItem item = items.get(i);
-                    System.out.println("Analyzing item " + (i + 1) + " of " + items.size());
 
                     if (i > 0) {
-                        resultsPane.startNextItem();
+                        resultsPane.startNextItem();      // Progress bar return to 0
                     }
+
+                    resultsPane.updateProgress(0.25);     // star analyse
 
                     try {
 
                         ThreatResult result = manager.analyzeInput(item);
+
+                        resultsPane.updateProgress(0.75);  // end analyse
 
                         resultsPane.addResult(
                                 item.getType().toString(),
                                 result.getInput(),
                                 result.getLevel(),
                                 result.getDescription(),
-                                "Completed"
-                        );
+                                AnalysisStatus.COMPLETED.name());
 
                     } catch (Exception ex) {
 
@@ -311,11 +304,7 @@ public class InputPane extends Application {
                                 ex.getMessage()
                         );
                     }
-
-                    // Update overall progress
-                    resultsPane.updateProgress(
-                            (double) (i + 1) / items.size()
-                    );
+                    resultsPane.updateProgress(1.0);
                 }
 
                 // Finish all analyses
@@ -326,22 +315,17 @@ public class InputPane extends Application {
 
             });
 
-// Start the thread
+            // Start the thread
             analysisThread.setDaemon(true);
             analysisThread.start();
-
 
         });
         Group inputGroup = new Group(radioBox);
 
-        // 18. Create ScrollPane
+        //Create ScrollPane
         VBox inputsBox = new VBox(15);
 
-        inputsBox.getChildren().addAll(
-                urlBox,
-                MesBox,
-                csvBox
-        );
+        inputsBox.getChildren().addAll(urlBox, MesBox, csvBox);
 
         ScrollPane scrollPane = new ScrollPane();
 
@@ -349,16 +333,14 @@ public class InputPane extends Application {
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(250);
 
-        // 19. Add elements to root
+        //Add elements to root
         root.getChildren().addAll(
                 new Label("Threat Detection"), inputGroup, scrollPane, analyze, resultsLayout);
 
-        // 20. Create and show window
+        //Create and show window
         Scene scene = new Scene(root, 900, 700);
 
-        scene.getStylesheets().add(
-                getClass().getResource("/style.css").toExternalForm()
-        );
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.setScene(scene);
         stage.setTitle("Threat Detection");
         stage.show();

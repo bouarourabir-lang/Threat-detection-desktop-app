@@ -1,5 +1,7 @@
 package AnalyseMessage;
 
+import Data.RiskLevel;
+
 public class MessageRiskScore {
     public static int calculateRiskScore(
             boolean hasSuspiciousKeywords,
@@ -31,11 +33,11 @@ public class MessageRiskScore {
     public static String getRiskLevel(int score) {
 
         if (score <= 2) {
-            return "Low";
+            return RiskLevel.LOW.name();
         } else if (score <= 5) {
-            return "Medium";
+            return RiskLevel.MEDIUM.name();
         } else {
-            return "High";
+            return RiskLevel.HIGH.name();
         }
     }
 }

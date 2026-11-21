@@ -11,10 +11,6 @@ public class InputItem {
             throw new IllegalArgumentException("Type cannot be null");
         }
 
-        if (content == null || content.trim().isEmpty()) {
-            throw new IllegalArgumentException("Content cannot be empty");
-        }
-
         this.type = type;
         this.content = content.trim();
     }

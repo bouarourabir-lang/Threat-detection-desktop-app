@@ -20,40 +20,32 @@ public class MessageAnalyzer {
             try {
                 semanticAnalyzer = new SemanticAnalyzer();
             } catch (Exception e) {
-                throw new IllegalStateException(
-                        "Could not initialize SemanticAnalyzer.", e
-                );
+                throw new IllegalStateException("Could not initialize SemanticAnalyzer.", e);
             }
         }
 
         return semanticAnalyzer;
     }
 
-    // Traditional + Semantic Detection
-    private static List<String> detectHybridIndicators(
-            String message) {
+      // Traditional + Semantic Detection
+    private static List<String> detectHybridIndicators(String message) {
 
         String text = MessagePreprocessor.preprocess(message);
 
         // Traditional indicators
-        List<String> traditionalIndicators =
-                detectProcessedIndicators(text);
+        List<String> traditionalIndicators = detectProcessedIndicators(text);
 
         // Semantic indicators
         List<String> semanticIndicators = new ArrayList<>();
 
         try {
-            semanticIndicators =
-                    new ArrayList<>(getSemanticAnalyzer().analyze(message));
+            semanticIndicators = new ArrayList<>(getSemanticAnalyzer().analyze(message));
 
         } catch (Exception e) {
             // If the AI part fails, we still use the traditional result
-            System.err.println(
-                    "Semantic analysis unavailable: " + e.getMessage()
-            );
+            System.err.println("Semantic analysis unavailable: " + e.getMessage());
         }
 
-        // Warnings like "never share your password" are not requests,
         // even if the AI finds them similar to a credential request
         if (!traditionalIndicators.contains("Credential request")
                 && containsAny(cleanText(text),
@@ -78,32 +70,25 @@ public class MessageAnalyzer {
     public static int analyzeMessage(String message) {
 
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Message cannot be empty."
-            );
+            throw new IllegalArgumentException("Message cannot be empty.");
         }
 
-        List<String> indicators =
-                detectHybridIndicators(message);
+        List<String> indicators = detectHybridIndicators(message);
 
         return MessageRiskScore.calculateRiskScore(
                 indicators.contains("Suspicious keywords"),
                 indicators.contains("Credential request"),
                 indicators.contains("Urgency language"),
-                indicators.contains("Threat language")
-        );
+                indicators.contains("Threat language"));
     }
 
     public static ThreatResult analyzeMessageResult(String message) {
 
         if (message == null || message.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Message cannot be empty."
-            );
+            throw new IllegalArgumentException("Message cannot be empty.");
         }
 
-        List<String> indicators =
-                detectHybridIndicators(message);
+        List<String> indicators = detectHybridIndicators(message);
 
         int score = MessageRiskScore.calculateRiskScore(
                 indicators.contains("Suspicious keywords"),
@@ -112,24 +97,17 @@ public class MessageAnalyzer {
                 indicators.contains("Threat language")
         );
 
-        String riskLevel =
-                MessageRiskScore.getRiskLevel(score);
+        String riskLevel = MessageRiskScore.getRiskLevel(score);
 
         String description;
 
         if (indicators.isEmpty()) {
             description = "No suspicious indicators detected.";
         } else {
-            description = "Detected indicators: "
-                    + String.join(", ", indicators);
+            description = "Detected indicators: " + String.join(", ", indicators);
         }
 
-        return new ThreatResult(
-                message,
-                score,
-                riskLevel,
-                description
-        );
+        return new ThreatResult(message, score, riskLevel, description);
     }
 
     // Traditional detection only (kept for compatibility)
@@ -175,7 +153,6 @@ public class MessageAnalyzer {
         }
 
         // Credential request = a request word + a sensitive item,
-        // and the message must not be a warning ("never share ...")
         boolean hasRequestWord = containsAny(text,
                 "share",
                 "send",
@@ -296,9 +273,7 @@ public class MessageAnalyzer {
             try {
                 semanticAnalyzer.close();
             } catch (Exception e) {
-                throw new IllegalStateException(
-                        "Could not close SemanticAnalyzer.", e
-                );
+                throw new IllegalStateException("Could not close SemanticAnalyzer.", e);
             } finally {
                 semanticAnalyzer = null;
             }

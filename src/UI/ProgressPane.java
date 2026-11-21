@@ -28,11 +28,7 @@ public class ProgressPane {
         progressLayout = new VBox(15);
         progressLayout.setAlignment(Pos.CENTER);
 
-        progressLayout.getChildren().addAll(
-                analysisLabel,
-                progressBar,
-                progressLabel
-        );
+        progressLayout.getChildren().addAll(analysisLabel, progressBar, progressLabel);
     }
 
     // Start analyzing an item
